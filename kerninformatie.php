@@ -27,6 +27,15 @@ class KerninformatiePlugin {
 	////////////////////////////////////////////////////////////
 
 	/**
+	 * Client
+	 * 
+	 * @var SoapClient
+	 */
+	private static $client;
+
+	////////////////////////////////////////////////////////////
+
+	/**
 	 * Bootstrap
 	 */
 	public static function bootstrap() {
@@ -109,7 +118,22 @@ class KerninformatiePlugin {
 
 	public static function settings_company_id_field() {
 		?><input type="text" class="regular-text" value="<?php form_option( 'kerninformatie_company_id' ); ?>" id="kerninformatie_company_id" name="kerninformatie_company_id" /><?php
-	}	
+	}
+
+	////////////////////////////////////////////////////////////
+
+	/**
+	 * Get client
+	 * 
+	 * @return SoapClient
+	 */
+	public static function get_client() {
+		if ( ! isset( self::$client ) ) {
+			self::$client = new SoapClient( self::API_URL );
+		}
+
+		return self::$client;
+	}
 
 	////////////////////////////////////////////////////////////
 	
@@ -121,11 +145,11 @@ class KerninformatiePlugin {
 	public static function shortcode_scores( $atts ) {
 		$return = '';
 	
+		$client = self::get_client();
+	
 		$username  = get_option( 'kerninformatie_username' );
 		$password  = get_option( 'kerninformatie_password' );
 		$company_id = get_option( 'kerninformatie_company_id' );
-	
-		$client = new SoapClient( self::API_URL );
 	
 		// Scores
 		$response = $client->getScores( $username, $password, $company_id );
@@ -154,13 +178,13 @@ class KerninformatiePlugin {
 		), $atts ) );
 
 		$return = '';
+
+		$client = self::get_client();
 	
 		$username  = get_option( 'kerninformatie_username' );
 		$password  = get_option( 'kerninformatie_password' );
 		$company_id = get_option( 'kerninformatie_company_id' );
-	
-		$client = new SoapClient( self::API_URL );
-	
+
 		// Answers
 		$response = $client->getAnswers( 
 			$username, $password, $company_id, $question_id, $universal_objects, 
