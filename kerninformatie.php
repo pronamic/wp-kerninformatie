@@ -32,6 +32,13 @@ class KerninformatiePlugin {
 	 * @var string
 	 */
 	public static $file;
+
+	/**
+	 * The plugin dirname
+	 * 
+	 * @var string
+	 */
+	public static $dirname;
 	
 	////////////////////////////////////////////////////////////
 
@@ -48,7 +55,8 @@ class KerninformatiePlugin {
 	 * Bootstrap
 	 */
 	public static function bootstrap( $file ) {
-		self::$file = $file;
+		self::$file    = $file;
+		self::$dirname = dirname( $file );
 
 		add_action( 'init',       array( __CLASS__, 'init' ) );
 		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
@@ -64,6 +72,9 @@ class KerninformatiePlugin {
 		$relPath = dirname( plugin_basename( self::$file ) ) . '/languages/';
 	
 		load_plugin_textdomain( 'kerninformatie', false, $relPath );
+
+		// Require
+		require_once self::$dirname . '/includes/template.php';
 
 		// Shortcodes
 		add_shortcode( 'kerninformatie_answers', array( __CLASS__, 'shortcode_answers' ) );
@@ -192,8 +203,8 @@ class KerninformatiePlugin {
 
 		$client = self::get_client();
 	
-		$username  = get_option( 'kerninformatie_username' );
-		$password  = get_option( 'kerninformatie_password' );
+		$username   = get_option( 'kerninformatie_username' );
+		$password   = get_option( 'kerninformatie_password' );
 		$company_id = get_option( 'kerninformatie_company_id' );
 
 		// Answers
