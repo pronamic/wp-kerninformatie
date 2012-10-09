@@ -27,6 +27,15 @@ class KerninformatiePlugin {
 	////////////////////////////////////////////////////////////
 
 	/**
+	 * The plugin file
+	 * 
+	 * @var string
+	 */
+	public static $file;
+	
+	////////////////////////////////////////////////////////////
+
+	/**
 	 * Client
 	 * 
 	 * @var SoapClient
@@ -38,9 +47,11 @@ class KerninformatiePlugin {
 	/**
 	 * Bootstrap
 	 */
-	public static function bootstrap() {
-		add_action( 'init', array( __CLASS__, 'init' ) );
-		add_action( 'admin_init' ,array( __CLASS__, 'admin_init' ) );
+	public static function bootstrap( $file ) {
+		self::$file = $file;
+
+		add_action( 'init',       array( __CLASS__, 'init' ) );
+		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
 	}
 
 	////////////////////////////////////////////////////////////
@@ -50,13 +61,13 @@ class KerninformatiePlugin {
 	 */
 	public static function init() {
 		// Text domain
-		$relPath = dirname( plugin_basename( __FILE__ ) ) . '/languages/';
+		$relPath = dirname( plugin_basename( self::$file ) ) . '/languages/';
 	
 		load_plugin_textdomain( 'kerninformatie', false, $relPath );
 
 		// Shortcodes
 		add_shortcode( 'kerninformatie_answers', array( __CLASS__, 'shortcode_answers' ) );
-		add_shortcode( 'kerninformatie_scores', array( __CLASS__, 'shortcode_scores' ) );
+		add_shortcode( 'kerninformatie_scores',  array( __CLASS__, 'shortcode_scores' ) );
 	}
 
 	////////////////////////////////////////////////////////////
@@ -67,35 +78,35 @@ class KerninformatiePlugin {
 	public static function admin_init() {
 		// Section
 		add_settings_section(
-			'kerninformatie_settings_section' , // $id
-			__( 'Kerninformatie', 'kerninformatie' ) , // $title
-			array( __CLASS__, 'settings_section' ) , // $callback 
-			'general' // $page
+			'kerninformatie_settings_section' , // id
+			__( 'Kerninformatie', 'kerninformatie' ) , // title
+			array( __CLASS__, 'settings_section' ) , // callback 
+			'general' // page
 		);
 
 		// Fields
 		add_settings_field(
-			'kerninformatie_username' , // $id
-			__( 'Username', 'kerninformatie' ) , // $title
-			array( __CLASS__, 'settings_username_field' ) , // $callback 
-			'general' , // $page
-			'kerninformatie_settings_section' // $section
+			'kerninformatie_username' , // id
+			__( 'Username', 'kerninformatie' ) , // title
+			array( __CLASS__, 'settings_username_field' ) , // callback 
+			'general' , // page
+			'kerninformatie_settings_section' // section
 		);
 
 		add_settings_field(
-			'kerninformatie_password' , // $id
-			__( 'Password', 'kerninformatie' ) , // $title
-			array( __CLASS__, 'settings_password_field' ) , // $callback 
-			'general' , // $page
-			'kerninformatie_settings_section' // $section
+			'kerninformatie_password' , // id
+			__( 'Password', 'kerninformatie' ) , // title
+			array( __CLASS__, 'settings_password_field' ) , // callback 
+			'general' , // page
+			'kerninformatie_settings_section' // section
 		);
 
 		add_settings_field(
-			'kerninformatie_company_id' , // $id
-			__( 'Company ID', 'kerninformatie' ) , // $title
-			array( __CLASS__, 'settings_company_id_field' ) , // $callback 
-			'general' , // $page
-			'kerninformatie_settings_section' // $section
+			'kerninformatie_company_id' , // id
+			__( 'Company ID', 'kerninformatie' ) , // title
+			array( __CLASS__, 'settings_company_id_field' ) , // callback 
+			'general' , // page
+			'kerninformatie_settings_section' // section
 		);
  	
 		// Settings
@@ -147,8 +158,8 @@ class KerninformatiePlugin {
 	
 		$client = self::get_client();
 	
-		$username  = get_option( 'kerninformatie_username' );
-		$password  = get_option( 'kerninformatie_password' );
+		$username   = get_option( 'kerninformatie_username' );
+		$password   = get_option( 'kerninformatie_password' );
 		$company_id = get_option( 'kerninformatie_company_id' );
 	
 		// Scores
@@ -201,4 +212,4 @@ class KerninformatiePlugin {
 	}
 }
 
-KerninformatiePlugin::bootstrap();
+KerninformatiePlugin::bootstrap( __FILE__ );
