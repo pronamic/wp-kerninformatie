@@ -11,9 +11,13 @@ The WordPress Kerninformatie plugin can display answers from the Kerninformatie 
 
 == Description ==
 
+...
+
+
 = Shortcodes =
 
 *	[kerinforamtie_answers]
+*	[]
 
 
 == Installation ==
@@ -28,6 +32,9 @@ WordPress installation and then activate the Plugin from Plugins page.
 
 
 == Changelog ==
+
+= 0.1.1 =
+*	Added template function kerninformatie_get_answers().
 
 = 0.1 =
 *	Initial release

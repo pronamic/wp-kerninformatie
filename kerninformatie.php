@@ -158,15 +158,13 @@ class KerninformatiePlugin {
 	}
 
 	////////////////////////////////////////////////////////////
-	
+
 	/**
-	 * Shortcode scores
+	 * Get scores
 	 * 
-	 * @param array $atts
+	 * @return SimpleXMLElement
 	 */
-	public static function shortcode_scores( $atts ) {
-		$return = '';
-	
+	public static function get_scores() {
 		$client = self::get_client();
 	
 		$username   = get_option( 'kerninformatie_username' );
@@ -178,11 +176,53 @@ class KerninformatiePlugin {
 
 		$scores = new SimpleXMLElement( $response );
 
+		return $scores;
+	}
+
+	/**
+	 * Shortcode scores
+	 * 
+	 * @param array $atts
+	 */
+	public static function shortcode_scores( $atts ) {
+		$return = '';
+	
+		$scores = self::get_scores();
+
 		ob_start();
 		include 'templates/scores.php';
 		$return = ob_get_clean();
 
 		return $return;
+	}
+
+	/**
+	 * Get answers
+	 * 
+	 * @param int $question_id
+	 * @param array $universal_objects
+	 * @param int $language_id
+	 * @param int $max_results
+	 * @param boolean $sort_random
+	 * 
+	 * @return SimpleXMLElement
+	 */
+	public static function get_answers( $question_id = 1, $universal_objects = array(), $language_id = 0, $max_results = 0, $sort_random = true ) {
+		$client = self::get_client();
+	
+		$username   = get_option( 'kerninformatie_username' );
+		$password   = get_option( 'kerninformatie_password' );
+		$company_id = get_option( 'kerninformatie_company_id' );
+
+		// Answers
+		$response = $client->getAnswers( 
+			$username, $password, $company_id, $question_id, $universal_objects, 
+			$language_id, $max_results, $sort_random 
+		);
+
+		$answers = new SimpleXMLElement( $response );
+
+		return $answers;
 	}
 	
 	/**
@@ -201,19 +241,7 @@ class KerninformatiePlugin {
 
 		$return = '';
 
-		$client = self::get_client();
-	
-		$username   = get_option( 'kerninformatie_username' );
-		$password   = get_option( 'kerninformatie_password' );
-		$company_id = get_option( 'kerninformatie_company_id' );
-
-		// Answers
-		$response = $client->getAnswers( 
-			$username, $password, $company_id, $question_id, $universal_objects, 
-			$language_id, $max_results, $sort_random 
-		);
-
-		$answers = new SimpleXMLElement( $response );
+		$answers = self::get_answers( $question_id, $universal_objects, $language_id, $max_results, $sort_random );
 
 		ob_start();
 		include 'templates/answers.php';

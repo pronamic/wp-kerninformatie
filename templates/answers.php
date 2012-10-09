@@ -7,17 +7,17 @@
 					<?php 
 					
 					printf(
-						__( '%s from %s says on %s:' , 'kerninformatie' ) , 
+						__( '%s from %s says on %s:' , 'kerninformatie' ),
 						sprintf(
-							'<strong itemprop="author">%s</strong>' , 
+							'<strong itemprop="author">%s</strong>',
 							$answer->guest->lastname
-						) ,
+						),
 						sprintf(
-							'<strong itemprop="location">%s</strong>' , 
+							'<strong itemprop="location">%s</strong>', 
 							$answer->guest->city
-						) , 
+						),
 						sprintf(
-							'<time itemprop="datePublished" time>%s</time>' ,
+							'<time itemprop="datePublished" time>%s</time>',
 							$answer->date
 						)
 					);
