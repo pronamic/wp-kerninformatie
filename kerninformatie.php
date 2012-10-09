@@ -199,11 +199,11 @@ class KerninformatiePlugin {
 	/**
 	 * Get answers
 	 * 
-	 * @param int $question_id
-	 * @param array $universal_objects
-	 * @param int $language_id
-	 * @param int $max_results
-	 * @param boolean $sort_random
+	 * @param int $question_id question id (1 = general, 2 = accomodation)
+	 * @param int $universal_objects univeral objects (empty array = all objects)
+	 * @param int $language_id language id (0 = all languages)
+	 * @param int $max_results maximum results (0 = all results)
+	 * @param boolean $sort_random sort random (true = random order)
 	 * 
 	 * @return SimpleXMLElement
 	 */
