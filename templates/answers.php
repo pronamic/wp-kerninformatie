@@ -1,4 +1,4 @@
-<?php if ( $answers->count() > 0 ): ?>
+<?php if ( ! empty( $answers ) && $answers->count() > 0 ): ?>
 	
 	<ul class="kerninformatie-answers-list">
 		<?php foreach ( $answers->answer as $answer ): ?>

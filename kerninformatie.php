@@ -172,9 +172,15 @@ class KerninformatiePlugin {
 		$company_id = get_option( 'kerninformatie_company_id' );
 	
 		// Scores
-		$response = $client->getScores( $username, $password, $company_id );
+		$scores = null;
 
-		$scores = new SimpleXMLElement( $response );
+		try {
+			$response = $client->getScores( $username, $password, $company_id );
+	
+			$scores = new SimpleXMLElement( $response );
+		} catch ( Exception $e ) {
+			// @todo do something
+		}
 
 		return $scores;
 	}
@@ -215,12 +221,18 @@ class KerninformatiePlugin {
 		$company_id = get_option( 'kerninformatie_company_id' );
 
 		// Answers
-		$response = $client->getAnswers( 
-			$username, $password, $company_id, $question_id, $universal_objects, 
-			$language_id, $max_results, $sort_random 
-		);
+		$answers = null;
 
-		$answers = new SimpleXMLElement( $response );
+		try {
+			$response = $client->getAnswers( 
+				$username, $password, $company_id, $question_id, $universal_objects, 
+				$language_id, $max_results, $sort_random 
+			);
+	
+			$answers = new SimpleXMLElement( $response );
+		} catch ( Exception $e ) {
+			// @todo do something
+		}
 
 		return $answers;
 	}
